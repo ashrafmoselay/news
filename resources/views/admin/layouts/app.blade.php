@@ -48,12 +48,12 @@
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ url('/admin') }}">Home</a></li>
-                    <li><a href="{{ url('/category') }}">Categories</a></li>
-                    <li><a href="{{ url('/news') }}">News</a></li>
-                    <li><a href="{{ url('/sliders') }}">Slider</a></li>
-                    <li><a href="{{ url('/gallery') }}">Gallery</a></li>
-                    <li><a href="{{ url('/Ads') }}">Ads</a></li>
+                    <li><a href="{{ url('admin/backend') }}">Home</a></li>
+                    <li><a href="{{ url('admin/category') }}">Categories</a></li>
+                    <li><a href="{{ url('admin/news') }}">News</a></li>
+                    <li><a href="{{ url('admin/sliders') }}">Slider</a></li>
+                    <li><a href="{{ url('admin/gallery') }}">Gallery</a></li>
+                    <li><a href="{{ url('admin/Ads') }}">Ads</a></li>
                 </ul>
 
                 <!-- Right Side Of Navbar -->

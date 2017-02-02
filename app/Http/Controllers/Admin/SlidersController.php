@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
@@ -8,12 +8,14 @@ use App\Http\Requests;
 
 use App\Sliders;
 use App\Http\Requests\SlidersRequest;
-use Input;
+
+use App\Http\Controllers\Controller;
+use Storage;
 class SlidersController extends Controller
 {
      public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
     /**
      * Display a listing of the resource.
@@ -24,7 +26,7 @@ class SlidersController extends Controller
     {
         
         $title = "Sliders Index";
-        //$list = DB::table('sliders')->get();
+        //$list = DB::table('admin/sliders')->get();
         $list = Sliders::Paginate();
         return view('admin.sliders.index',compact('title','list'));
     }
@@ -49,15 +51,18 @@ class SlidersController extends Controller
     public function store(SlidersRequest $request)
     {
         $inputs = $request->all();
-        if(!isset($inputs['active']))$inputs['active']=0;
-        else $inputs['active']=1;
-        $original = Input::file('image')->getClientOriginalName();
+        $inputs['active'] = $request->has('active')?1:0;
+        /*$original = $request->file('image')->getClientOriginalName();
         $ext = explode('.', $original);
         $fileName = time().str_random(6).'.'.end($ext);
-        Input::file('image')->move('images/sliders',$fileName);
+        $request->file('image')->move('images/sliders',$fileName);*/
+        $ext = $request->image->extension();
+        $fileName = time().str_random(6).'.'.$ext;
+        $path = 'sliders/'.$fileName;
+        Storage::put($path,  file_get_contents($request->file('image')->getRealPath()));
         $inputs['image'] = $fileName;
         Sliders::create($inputs);
-        return redirect('sliders');
+        return redirect('admin/sliders');
     }
 
     /**
@@ -68,7 +73,7 @@ class SlidersController extends Controller
      */
     public function show($id)
     {
-        $category = Sliders::with('sliders')->findOrFail($id);
+        $category = Sliders::with('admin/sliders')->findOrFail($id);
         $title = 'Sliders | '.$category->name; 
         return view('admin.sliders.show',compact('sliders','title'));
     }
@@ -97,18 +102,21 @@ class SlidersController extends Controller
     {
         $news = Sliders::find($id);
         $inputs = $request->all();
-        if(!isset($inputs['active']))$inputs['active']=0;
-        else $inputs['active']=1;
+        $inputs['active'] = $request->has('active')?1:0;
         $fileName = $news->image;
-        if(!empty(Input::file('image'))){
-        $original = Input::file('image')->getClientOriginalName();
-        $ext = explode('.', $original);
-        $fileName = time().str_random(6).'.'.end($ext);
-        Input::file('image')->move('images/sliders',$fileName);
+        if(!empty($request->file('image'))){
+            /*$original = $request->file('image')->getClientOriginalName();
+            $ext = explode('.', $original);
+            $fileName = time().str_random(6).'.'.end($ext);
+            $request->file('image')->move('images/sliders',$fileName);*/
+            $ext = $request->image->extension();
+            $fileName = time().str_random(6).'.'.$ext;
+            $path = 'sliders/'.$fileName;
+            Storage::put($path,  file_get_contents($request->file('image')->getRealPath()));
         }
         $inputs['image'] = $fileName;
         $news->update($inputs);
-        return redirect('sliders');
+        return redirect('admin/sliders');
     }
 
     /**
@@ -120,13 +128,13 @@ class SlidersController extends Controller
     public function destroy($id)
     {
        Sliders::find($id)->delete();
-       return redirect('sliders');
+       return redirect('admin/sliders');
     }
     public function search($term){
         return Sliders::search($term);
     }
     public function changeStatus(){
-        if(isset($_POST)){
+        if($request->isMethod('post')){
             $category = Sliders::find($_POST['id']);
             $category->active = $_POST['status'];
             $category->save();

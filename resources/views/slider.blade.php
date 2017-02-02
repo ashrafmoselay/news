@@ -8,7 +8,7 @@ $sliders = \App\Sliders::limit(5)->where('active',1)->orderBy('id','DESC')->get(
           @foreach($sliders as $slider)
           <div class="single_iteam"> 
           <a href="pages/single_page.html"> 
-            <img src="{{asset('images/sliders/'.$slider->image)}}" alt="">
+            <img src="{{asset('uploads/sliders/'.$slider->image)}}" alt="">
           </a>
             <div class="slider_article">
               <h2>
@@ -34,7 +34,7 @@ $sliders = \App\Sliders::limit(5)->where('active',1)->orderBy('id','DESC')->get(
               <li>
                 <div class="media">
                  <a class="media-left" href="{{ url('/story/'.$news->id.'/'.str_replace(' ','-', $news->title)) }}">
-                  <img src="{{asset('images/news').'/'.$news->image}}" alt="{{$news->title}}">
+                  <img src="{{asset('uploads/news').'/'.$news->image}}" alt="{{$news->title}}">
                   </a>
                    <div class="media-body">  <a class="catg_title" href="{{ url('/story/'.$news->id.'/'.str_replace(' ','-', $news->title)) }}"> {{$news->title}}</a> </div>
                 </div>

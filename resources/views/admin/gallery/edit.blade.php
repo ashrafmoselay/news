@@ -14,7 +14,7 @@
 	</div>
     <div class="row">
         <div class="col-md-12">
-			{!! Form::open(['route'=>['gallery.update',$slider->id],'method'=>'put', 'files'=>true]) !!}
+			{!! Form::open(['route'=>['admin.gallery.update',$slider->id],'method'=>'put', 'files'=>true]) !!}
 				<div class="form-group">
 					<label for="">Title</label>
 					<input name="title" type="text" value="{{$slider->title}}" class="form-control" required="required" placeholder="Title">
@@ -22,7 +22,7 @@
 				<div class="form-group">
 					<label for="">Image</label>
 					<input name="image" type="file" class="form-control" >
-					<img width="10%" src="{{asset('images/sliders/'.$slider->image)}}">
+					<img width="10%" src="{{asset('uploads/gallery/'.$slider->image)}}">
 				</div>
 				<div class="form-group">
 					<label for="">Active</label>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
@@ -8,13 +8,15 @@ use App\Http\Requests;
 
 use App\Ads;
 use App\Http\Requests\AdsRequest;
-use Input;
+
+use App\Http\Controllers\Controller;
+use Storage;
 
 class AdsController extends Controller
 {
      public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
     /**
      * Display a listing of the resource.
@@ -25,7 +27,7 @@ class AdsController extends Controller
     {
         
         $title = "Ads Index";
-        //$list = DB::table('Ads')->get();
+        //$list = DB::table('admin/Ads')->get();
         $list = Ads::Paginate();
         return view('admin.Ads.index',compact('title','list'));
     }
@@ -50,15 +52,18 @@ class AdsController extends Controller
     public function store(AdsRequest $request)
     {
         $inputs = $request->all();
-        if(!isset($inputs['active']))$inputs['active']=0;
-        else $inputs['active']=1;
-        $original = Input::file('image')->getClientOriginalName();
+        $inputs['active'] = $request->has('active')?1:0;
+        /*$original = $request->file('image')->getClientOriginalName();
         $ext = explode('.', $original);
         $fileName = time().str_random(6).'.'.end($ext);
-        Input::file('image')->move('images/Ads',$fileName);
+        $request->file('image')->move('images/Ads',$fileName);*/
+        $ext = $request->image->extension();
+        $fileName = time().str_random(6).'.'.$ext;
+        $path = 'Ads/'.$fileName;
+        Storage::put($path,  file_get_contents($request->file('image')->getRealPath()));
         $inputs['image'] = $fileName;
         Ads::create($inputs);
-        return redirect('Ads');
+        return redirect('admin/Ads');
     }
 
     /**
@@ -69,7 +74,7 @@ class AdsController extends Controller
      */
     public function show($id)
     {
-        $category = Ads::with('Ads')->findOrFail($id);
+        $category = Ads::with('admin/Ads')->findOrFail($id);
         $title = 'Ads | '.$category->name; 
         return view('admin.Ads.show',compact('Ads','title'));
     }
@@ -98,18 +103,21 @@ class AdsController extends Controller
     {
         $news = Ads::find($id);
         $inputs = $request->all();
-        if(!isset($inputs['active']))$inputs['active']=0;
-        else $inputs['active']=1;
+        $inputs['active'] = $request->has('active')?1:0;
         $fileName = $news->image;
-        if(!empty(Input::file('image'))){
-        $original = Input::file('image')->getClientOriginalName();
-        $ext = explode('.', $original);
-        $fileName = time().str_random(6).'.'.end($ext);
-        Input::file('image')->move('images/Ads',$fileName);
+        if(!empty($request->file('image'))){
+            /*$original = $request->file('image')->getClientOriginalName();
+            $ext = explode('.', $original);
+            $fileName = time().str_random(6).'.'.end($ext);
+            $request->file('image')->move('images/Ads',$fileName);*/     
+            $ext = $request->image->extension();
+            $fileName = time().str_random(6).'.'.$ext;
+            $path = 'Ads/'.$fileName;
+            Storage::put($path,  file_get_contents($request->file('image')->getRealPath()));
         }
         $inputs['image'] = $fileName;
         $news->update($inputs);
-        return redirect('Ads');
+        return redirect('admin/Ads');
     }
 
     /**
@@ -121,13 +129,13 @@ class AdsController extends Controller
     public function destroy($id)
     {
        Ads::find($id)->delete();
-       return redirect('Ads');
+       return redirect('admin/Ads');
     }
     public function search($term){
         return Ads::search($term);
     }
     public function changeStatus(){
-        if(isset($_POST)){
+        if($request->isMethod('post')){
             $category = Ads::find($_POST['id']);
             $category->active = $_POST['status'];
             $category->save();

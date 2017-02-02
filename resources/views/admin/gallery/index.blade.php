@@ -20,7 +20,8 @@
 						<tr>
 							<td> {{ $item->id }} </td>
 							<td> {{ $item->title }} </td>
-							<td> <img width="10%" src="{{asset('images/gallery/'.$item->image)}}"> </td>
+
+							<td> <img width="10%" src="{{asset('uploads/gallery/'.$item->image)}}"> </td>
 							<td> 
 								<a rel="{{$item->id}}" status="{{$item->active}}" class="changeStaus" href="#">
 									<img src="{{ asset('assets/icon').'/'.$item->active}}.png">
@@ -65,7 +66,7 @@
 			e.preventDefault();
 			var btn = $(this);
 			var id_ = btn.attr('rel');
-			var url_ = "{{Url('/gallery/changeStatus')}}";
+			var url_ = "{{Url('admin/gallery/changeStatus')}}";
 			var oldstatus = btn.attr('status');
 			var newstatus = 0;
 			if(oldstatus==0){

@@ -14,7 +14,7 @@
 	</div>
     <div class="row">
         <div class="col-md-12">
-			{!! Form::open(['route'=>'category.store','method'=>'post']) !!}
+			{!! Form::open(['route'=>'admin.category.store','method'=>'post']) !!}
 				<div class="form-group">
 					<label for="">Category Name</label>
 					<input name="name" type="text" class="form-control" id="" placeholder="Category Name">

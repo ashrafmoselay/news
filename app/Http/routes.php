@@ -14,27 +14,29 @@
 
 Route::get('/', 'SiteController@index');
 Route::auth();
+Route::group(['middleware' => 'auth','prefix'=>'admin','namespace' => 'Admin'], function () {
+  	Route::get('backend', 'HomeController@index');
+	Route::resource('/category','CategoryController');
+	Route::post('/category/changeStatus', 'CategoryController@changeStatus');
+	Route::get('category/destroy/{id}','CategoryController@destroy');
 
-Route::get('/admin', 'HomeController@index');
-Route::resource('/category','CategoryController');
-Route::post('/category/changeStatus', 'CategoryController@changeStatus');
-Route::get('category/destroy/{id}','CategoryController@destroy');
+	Route::resource('/news','NewsController');
+	Route::post('/news/changeStatus', 'NewsController@changeStatus');
+	Route::get('news/destroy/{id}','NewsController@destroy');
 
-Route::resource('/news','NewsController');
-Route::post('/news/changeStatus', 'NewsController@changeStatus');
-Route::get('news/destroy/{id}','NewsController@destroy');
+	Route::resource('/sliders','SlidersController');
+	Route::post('/sliders/changeStatus', 'SlidersController@changeStatus');
+	Route::get('sliders/destroy/{id}','SlidersController@destroy');
 
-Route::resource('/sliders','SlidersController');
-Route::post('/sliders/changeStatus', 'SlidersController@changeStatus');
-Route::get('sliders/destroy/{id}','SlidersController@destroy');
+	Route::resource('/gallery','GalleryController');
+	Route::post('/gallery/changeStatus', 'GalleryController@changeStatus');
+	Route::get('gallery/destroy/{id}','GalleryController@destroy');
 
-Route::resource('/gallery','GalleryController');
-Route::post('/gallery/changeStatus', 'GalleryController@changeStatus');
-Route::get('gallery/destroy/{id}','GalleryController@destroy');
+	Route::resource('/Ads','AdsController');
+	Route::post('/Ads/changeStatus', 'AdsController@changeStatus');
+	Route::get('Ads/destroy/{id}','AdsController@destroy');
+});
 
-Route::resource('/Ads','AdsController');
-Route::post('/Ads/changeStatus', 'AdsController@changeStatus');
-Route::get('Ads/destroy/{id}','AdsController@destroy');
 
 Route::get('story/{id}/{title}','StoryController@detailes');
 Route::get('section/{id}/{title}','StoryController@category');

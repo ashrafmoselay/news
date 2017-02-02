@@ -65,7 +65,7 @@
           ?>
           <ul id="ticker01" class="news_sticker">
             @foreach($list as $news)
-            <li><a href="{{ url('/story/'.$news->id.'/'.str_replace(' ','-', $news->title)) }}"><img src="{{asset('images/news').'/'.$news->image}}" alt="">{{$news->title}}</a></li>
+            <li><a href="{{ url('/story/'.$news->id.'/'.str_replace(' ','-', $news->title)) }}"><img src="{{asset('uploads/news').'/'.$news->image}}" alt="">{{$news->title}}</a></li>
              @endforeach
           </ul>
           <div class="social_area">

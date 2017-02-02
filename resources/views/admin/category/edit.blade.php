@@ -3,7 +3,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-			{!! Form::open(['route'=>['category.update',$category->id],'method'=>'put']) !!}
+			{!! Form::open(['route'=>['admin.category.update',$category->id],'method'=>'put']) !!}
 				<div class="form-group">
 					<label for="">Category Name</label>
 					<input name="name" type="text" value="{{$category->name}}" class="form-control" id="" placeholder="Input field">

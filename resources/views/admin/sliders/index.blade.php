@@ -3,7 +3,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-			<a class="btn btn-default" href="sliders/create" role="button">Create</a>
+			<a class="btn btn-default" href="admin/sliders/create" role="button">Create</a>
 			<input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
 			<table class="table table-hover display">
 				<thead>
@@ -20,7 +20,7 @@
 						<tr>
 							<td> {{ $item->id }} </td>
 							<td> {{ $item->title }} </td>
-							<td> <img width="10%" src="{{asset('images/sliders/'.$item->image)}}"> </td>
+							<td> <img width="10%" src="{{asset('uploads/sliders/'.$item->image)}}"> </td>
 							<td> 
 								<a rel="{{$item->id}}" status="{{$item->active}}" class="changeStaus" href="#">
 									<img src="{{ asset('assets/icon').'/'.$item->active}}.png">
@@ -65,7 +65,7 @@
 			e.preventDefault();
 			var btn = $(this);
 			var id_ = btn.attr('rel');
-			var url_ = "{{Url('/sliders/changeStatus')}}";
+			var url_ = "{{Url('admin/sliders/changeStatus')}}";
 			var oldstatus = btn.attr('status');
 			var newstatus = 0;
 			if(oldstatus==0){

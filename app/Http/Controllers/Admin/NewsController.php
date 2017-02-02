@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
@@ -9,12 +9,14 @@ use App\Http\Requests;
 use App\News;
 use App\Category;
 use App\Http\Requests\NewsRequest;
-use Input;
+
+use App\Http\Controllers\Controller;
+use Storage;
 class NewsController extends Controller
 {
      public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
     /**
      * Display a listing of the resource.
@@ -25,7 +27,7 @@ class NewsController extends Controller
     {
         
         $title = "News Index";
-        //$list = DB::table('news')->get();
+        //$list = DB::table('admin/news')->get();
         $list = News::Paginate();
         return view('admin.news.index',compact('title','list'));
     }
@@ -51,15 +53,18 @@ class NewsController extends Controller
     public function store(NewsRequest $request)
     {
         $inputs = $request->all();
-        if(!isset($inputs['active']))$inputs['active']=0;
-        else $inputs['active']=1;
-        $original = Input::file('image')->getClientOriginalName();
+        $inputs['active'] = $request->has('active')?1:0;
+        /*$original = $request->file('image')->getClientOriginalName();
         $ext = explode('.', $original);
         $fileName = time().str_random(6).'.'.end($ext);
-        Input::file('image')->move('images/news',$fileName);
+        $request->file('image')->move('images/news',$fileName);*/
+        $ext = $request->image->extension();
+        $fileName = time().str_random(6).'.'.$ext;
+        $path = 'news/'.$fileName;
+        Storage::put($path,  file_get_contents($request->file('image')->getRealPath()));
         $inputs['image'] = $fileName;
         News::create($inputs);
-        return redirect('news');
+        return redirect('admin/news');
     }
 
     /**
@@ -70,7 +75,7 @@ class NewsController extends Controller
      */
     public function show($id)
     {
-        $category = News::with('news')->findOrFail($id);
+        $category = News::with('admin/news')->findOrFail($id);
         $title = 'News | '.$category->name; 
         return view('admin.news.show',compact('news','title'));
     }
@@ -100,18 +105,21 @@ class NewsController extends Controller
     {
         $news = News::find($id);
         $inputs = $request->all();
-        if(!isset($inputs['active']))$inputs['active']=0;
-        else $inputs['active']=1;
+        $inputs['active'] = $request->has('active')?1:0;
         $fileName = $news->image;
-        if(!empty(Input::file('image'))){
-        $original = Input::file('image')->getClientOriginalName();
-        $ext = explode('.', $original);
-        $fileName = time().str_random(6).'.'.end($ext);
-        Input::file('image')->move('images/news',$fileName);
+        if(!empty($request->file('image'))){
+            /*$original = $request->file('image')->getClientOriginalName();
+            $ext = explode('.', $original);
+            $fileName = time().str_random(6).'.'.end($ext);
+            $request->file('image')->move('images/news',$fileName);*/
+            $ext = $request->image->extension();
+            $fileName = time().str_random(6).'.'.$ext;
+            $path = 'news/'.$fileName;
+            Storage::put($path,  file_get_contents($request->file('image')->getRealPath()));
         }
         $inputs['image'] = $fileName;
         $news->update($inputs);
-        return redirect('news');
+        return redirect('admin/news');
     }
 
     /**
@@ -123,13 +131,13 @@ class NewsController extends Controller
     public function destroy($id)
     {
        News::find($id)->delete();
-       return redirect('news');
+       return redirect('admin/news');
     }
     public function search($term){
         return News::search($term);
     }
     public function changeStatus(){
-        if(isset($_POST)){
+        if($request->isMethod('post')){
             $category = News::find($_POST['id']);
             $category->active = $_POST['status'];
             $category->save();

@@ -15,7 +15,7 @@
           	<ul class=" wow fadeInDown categoryList">
 		    @foreach($news as $story)
 		    <li class="col-lg-3">
-		      <figure class="bsbig_fig"> <a href="{{ url('/story/'.$story->id.'/'.str_replace(' ','-', $story->title)) }}" class="featured_img"> <img alt="{{$story->title}}" src="{{asset('images/news').'/'.$story->image}}"> <span class="overlay"></span> </a>
+		      <figure class="bsbig_fig"> <a href="{{ url('/story/'.$story->id.'/'.str_replace(' ','-', $story->title)) }}" class="featured_img"> <img alt="{{$story->title}}" src="{{asset('uploads/news').'/'.$story->image}}"> <span class="overlay"></span> </a>
 		        <figcaption> <a href="{{ url('/story/'.$story->id.'/'.str_replace(' ','-', $story->title)) }}">{{$story->title}}</a> </figcaption>
 		        <p>{{$story->short_desc}}</p>
 		      </figure>

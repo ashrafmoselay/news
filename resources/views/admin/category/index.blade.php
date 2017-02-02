@@ -3,7 +3,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-			<a class="btn btn-default" href="category/create" role="button">Create</a>
+			<a class="btn btn-default" href="admin/category/create" role="button">Create</a>
 			<input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
 			<table class="table table-hover">
 				<thead>
@@ -62,7 +62,7 @@
 			e.preventDefault();
 			var btn = $(this);
 			var id_ = btn.attr('rel');
-			var url_ = "{{Url('/category/changeStatus')}}";
+			var url_ = "{{Url('admin/category/changeStatus')}}";
 			var oldstatus = btn.attr('status');
 			var newstatus = 0;
 			if(oldstatus==0){

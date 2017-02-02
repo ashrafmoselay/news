@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 //use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Category;
 use App\Http\Requests\CategoryRequest;
+use App\Http\Controllers\Controller;
 use Request;
 class CategoryController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
     /**
      * Display a listing of the resource.
@@ -22,7 +23,7 @@ class CategoryController extends Controller
     {
         
         $title = "Category Index";
-        //$list = DB::table('category')->get();
+        //$list = DB::table('admin/category')->get();
         $list = Category::Paginate();
         return view('admin.category.index',compact('title','list'));
     }
@@ -48,10 +49,9 @@ class CategoryController extends Controller
     public function store(CategoryRequest $request)
     {
         $inputs = $request->all();
-        if(!isset($inputs['active']))$inputs['active']=0;
-        else $inputs['active']=1;
+        $inputs['active'] = $request->has('active')?1:0;
         Category::create($inputs);
-        return redirect('category');
+        return redirect('admin/category');
     }
 
     /**
@@ -94,11 +94,10 @@ class CategoryController extends Controller
         //$category->name = Request::get('name');
         $inputs = $request->all();
         
-        if(!isset($inputs['active']))$inputs['active']=0;
-        else $inputs['active']=1;
+        $inputs['active'] = $request->has('active')?1:0;
         $category->update($inputs);
         $category->save();
-        return redirect('category');
+        return redirect('admin/category');
     }
 
     /**
@@ -110,13 +109,13 @@ class CategoryController extends Controller
     public function destroy($id)
     {
        Category::find($id)->delete();
-       return redirect('category');
+       return redirect('admin/category');
     }
     public function search($term){
         return Category::search($term);
     }
     public function changeStatus(){
-        if(isset($_POST)){
+        if($request->isMethod('post')){
             $category = Category::find($_POST['id']);
             $category->active = $_POST['status'];
             $category->save();

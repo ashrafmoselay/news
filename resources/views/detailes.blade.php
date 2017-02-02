@@ -15,7 +15,7 @@
           <span><i class="fa fa-calendar"></i>{{$news->created_at}}</span> 
           <a href="{{ url('/section/'.$news->category->id.'/'.str_replace(' ','-', $news->category->name)) }}">
           <i class="fa fa-tags"></i>{{$news->category->name}}</a> </div>
-          <div class="single_page_content"> <img class="img-center" src="{{asset('images/news').'/'.$news->image}}" alt="">
+          <div class="single_page_content"> <img class="img-center" src="{{asset('uploads/news').'/'.$news->image}}" alt="">
             <p>
               {{$news->short_desc}}
             </p>
@@ -40,7 +40,7 @@
               <li>
                 <div class="media">
                  <a class="media-left" href="{{ url('/story/'.$news->id.'/'.str_replace(' ','-', $news->title)) }}">
-                  <img src="{{asset('images/news').'/'.$news->image}}" alt="{{$news->title}}">
+                  <img src="{{asset('uploads/news').'/'.$news->image}}" alt="{{$news->title}}">
                   </a>
                    <div class="media-body">  <a class="catg_title" href="{{ url('/story/'.$news->id.'/'.str_replace(' ','-', $news->title)) }}"> {{$news->title}}</a> </div>
                 </div>
@@ -72,7 +72,7 @@
               <li>
                 <div class="media wow fadeInDown">
                  <a class="media-left" href="{{ url('/story/'.$story->id.'/'.str_replace(' ','-', $story->title)) }}">
-                  <img src="{{asset('images/news').'/'.$story->image}}" alt="{{$story->title}}">
+                  <img src="{{asset('uploads/news').'/'.$story->image}}" alt="{{$story->title}}">
                   </a>
                    <div class="media-body">  <a class="catg_title" href="{{ url('/story/'.$story->id.'/'.str_replace(' ','-', $story->title)) }}"> {{$story->title}}</a> </div>
                 </div>
@@ -87,7 +87,7 @@
             ?>
             @foreach($adsList as $ads)
             <a class="sideAdd" href="{{$ads->link}}">
-              <img src="{{asset('images/Ads/'.$ads->image)}}" alt="{{$ads->title}}">
+              <img src="{{asset('uploads/Ads/'.$ads->image)}}" alt="{{$ads->title}}">
             </a>
             @endforeach 
           </div>

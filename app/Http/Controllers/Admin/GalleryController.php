@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
@@ -8,12 +8,14 @@ use App\Http\Requests;
 
 use App\Gallery;
 use App\Http\Requests\GalleryRequest;
-use Input;
+
+use App\Http\Controllers\Controller;
+use Storage;
 class GalleryController extends Controller
 {
      public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
     /**
      * Display a listing of the resource.
@@ -49,15 +51,20 @@ class GalleryController extends Controller
     public function store(GalleryRequest $request)
     {
         $inputs = $request->all();
-        if(!isset($inputs['active']))$inputs['active']=0;
-        else $inputs['active']=1;
-        $original = Input::file('image')->getClientOriginalName();
+        //if(!isset($inputs['active']))$inputs['active']=0;else $inputs['active']=1;
+        $inputs['active'] = $request->has('active')?1:0;
+        /*$original = $request->file('image')->getClientOriginalName();
         $ext = explode('.', $original);
         $fileName = time().str_random(6).'.'.end($ext);
-        Input::file('image')->move('images/gallery',$fileName);
+        $request->file('image')->move('images/gallery',$fileName);*/
+        $ext = $request->image->extension();
+        $fileName = time().str_random(6).'.'.$ext;
+        //$path = $request->file('image')->move('images/gallery', $fileName);
+        $path = 'gallery/'.$fileName;
+        Storage::put($path,  file_get_contents($request->file('image')->getRealPath()));
         $inputs['image'] = $fileName;
         Gallery::create($inputs);
-        return redirect('gallery');
+        return redirect('admin/gallery');
     }
 
     /**
@@ -97,18 +104,21 @@ class GalleryController extends Controller
     {
         $news = Gallery::find($id);
         $inputs = $request->all();
-        if(!isset($inputs['active']))$inputs['active']=0;
-        else $inputs['active']=1;
+        $inputs['active'] = $request->has('active')?1:0;
         $fileName = $news->image;
-        if(!empty(Input::file('image'))){
-        $original = Input::file('image')->getClientOriginalName();
-        $ext = explode('.', $original);
-        $fileName = time().str_random(6).'.'.end($ext);
-        Input::file('image')->move('images/gallery',$fileName);
+        if(!empty($request->file('image'))){
+            /*$original = $request->file('image')->getClientOriginalName();
+            $ext = explode('.', $original);
+            $fileName = time().str_random(6).'.'.end($ext);
+            $request->file('image')->move('images/gallery',$fileName);*/
+            $ext = $request->image->extension();
+            $fileName = time().str_random(6).'.'.$ext;
+            $path = 'gallery/'.$fileName;
+            Storage::put($path,  file_get_contents($request->file('image')->getRealPath()));
         }
         $inputs['image'] = $fileName;
         $news->update($inputs);
-        return redirect('gallery');
+        return redirect('admin/gallery');
     }
 
     /**
@@ -120,13 +130,13 @@ class GalleryController extends Controller
     public function destroy($id)
     {
        Gallery::find($id)->delete();
-       return redirect('gallery');
+       return redirect('admin/gallery');
     }
     public function search($term){
         return Gallery::search($term);
     }
-    public function changeStatus(){
-        if(isset($_POST)){
+    public function changeStatus(Request $request){
+        if($request->isMethod('post')){
             $category = Gallery::find($_POST['id']);
             $category->active = $_POST['status'];
             $category->save();

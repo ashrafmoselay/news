@@ -35,7 +35,7 @@
               @foreach($photo as $img)
                 <li>
                   <div class="photo_grid">
-                    <figure class="effect-layla"> <a class="fancybox-buttons" data-fancybox-group="button" href="{{asset('images/gallery/'.$img->image)}}" title="{{$img->title}}"> <img src="{{asset('images/gallery/'.$img->image)}}" alt="{{$img->title}}"/></a> </figure>
+                    <figure class="effect-layla"> <a class="fancybox-buttons" data-fancybox-group="button" href="{{asset('uploads/gallery/'.$img->image)}}" title="{{$img->title}}"> <img src="{{asset('uploads/gallery/'.$img->image)}}" alt="{{$img->title}}"/></a> </figure>
                   </div>
                 </li>
                 @endforeach
@@ -74,7 +74,7 @@
               <li>
                 <div class="media wow fadeInDown">
                  <a class="media-left" href="{{ url('/story/'.$news->id.'/'.str_replace(' ','-', $news->title)) }}">
-                  <img src="{{asset('images/news').'/'.$news->image}}" alt="{{$news->title}}">
+                  <img src="{{asset('uploads/news').'/'.$news->image}}" alt="{{$news->title}}">
                   </a>
                    <div class="media-body">  <a class="catg_title" href="{{ url('/story/'.$news->id.'/'.str_replace(' ','-', $news->title)) }}"> {{$news->title}}</a> </div>
                 </div>
@@ -138,7 +138,7 @@
             ?>
             @foreach($adsList as $ads)
             <a class="sideAdd" href="{{$ads->link}}">
-              <img src="{{asset('images/Ads/'.$ads->image)}}" alt="{{$ads->title}}">
+              <img src="{{asset('uploads/Ads/'.$ads->image)}}" alt="{{$ads->title}}">
             </a>
             @endforeach 
           </div>

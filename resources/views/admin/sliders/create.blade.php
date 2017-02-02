@@ -14,7 +14,7 @@
 	</div>
     <div class="row">
         <div class="col-md-12">
-			{!! Form::open(['route'=>'sliders.store','method'=>'post', 'files'=>true]) !!}
+			{!! Form::open(['route'=>'admin.sliders.store','method'=>'post', 'files'=>true]) !!}
 				<div class="form-group">
 					<label for="">Title</label>
 					<input name="title" type="text" class="form-control" required="required" placeholder="Title">
